@@ -1,6 +1,6 @@
 #include "InputOutput.h"
 
-bool InputOutput::parse(const std::string &str,std::string &date,ScheduleItem &item,char &ground,bool &cancel){
+bool InputOutput::parse(const std::string &str,Date &date,ScheduleItem &item,char &ground,bool &cancel){
     int ret;
     int n;
 
@@ -21,13 +21,14 @@ bool InputOutput::parse(const std::string &str,std::string &date,ScheduleItem &i
 
     /* 解析日期 */
     while( *p == ' ' ) p++;
-    date.clear();
+    std::string tmp;
     while(*p!='\0' && *p!=' '){
-        date.push_back(*p);
+        tmp.push_back(*p);
         p++;
     }
     //printf("date = %s\n",date.c_str());
-    if(date.empty()){
+    date = Date( tmp );
+    if( !date.isValid() ){
         return false;
     }
 
@@ -89,16 +90,16 @@ void InputOutput::showPlayGround( const std::string &name, PlayGround &pg ){
 
     Schedule schedule = pg.getSchedule();
 
-    std::vector<std::string> dates = schedule.getDates();
+    std::vector<Date> dates = schedule.getDates();
 
-    std::vector<std::string>::iterator ite;
+    std::vector<Date>::iterator ite;
     for(ite=dates.begin(); ite!=dates.end(); ite++){
         ScheduleOfDay day = schedule.getScheduleOfDay(*ite);
 
-        std::list<ScheduleItem> items = day.getItems();
-        std::list<ScheduleItem>::iterator items_ite;
+        std::vector<ScheduleItem> items = day.getItems();
+        std::vector<ScheduleItem>::iterator items_ite;
         for(items_ite=items.begin(); items_ite!=items.end(); items_ite++){
-            printf("> %s %d:00~%d:00 ",(*ite).c_str(),items_ite->begin,items_ite->end);
+            printf("> %s %d:00~%d:00 ",ite->toString().c_str(),items_ite->begin,items_ite->end);
             if(items_ite->canceled){
                 printf("违约金 ");
             }

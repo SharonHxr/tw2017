@@ -6,7 +6,7 @@ SRCS = BillingRule.cpp \
 	   PlayGround.cpp
 
 OBJS = $(SRCS:.cpp=.o)
-CXXFLAGS = $(addprefix -I,$(INC))
+CXXFLAGS = $(addprefix -I,$(INC)) -g
 
 test: $(OBJS)
 	c++ -o $@ $^

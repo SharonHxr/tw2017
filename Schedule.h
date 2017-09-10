@@ -1,7 +1,7 @@
 #ifndef _H_SCHDULE_
 #define _H_SCHDULE_
 
-#include <map>
+#include <set>
 #include <string>
 #include <list>
 #include <vector>
@@ -26,7 +26,10 @@ public:
     int getMonth();
     int getDay();
 
-    bool operator<( const Date &date );
+    std::string toString() const;
+
+    bool operator<( const Date &date ) const;
+    bool operator==( const Date &date ) const;
 
 private:
     void init( int y, int m, int d );
@@ -41,7 +44,8 @@ private:
 class ScheduleItem{
 public:
     ScheduleItem( const std::string &user=std::string(), int begin=0,int end=0, float price=0, bool canceled=false);
-    bool operator == (const ScheduleItem &);
+    bool operator == ( const ScheduleItem & ) const;
+    bool operator <  ( const ScheduleItem & ) const;
 
     int begin;
     int end;
@@ -57,25 +61,32 @@ public:
     bool add(const ScheduleItem &item);
     bool cancel(const ScheduleItem &item);
 
-    std::list<ScheduleItem> getItems();
+    bool operator == (const ScheduleOfDay &);
+    bool operator <(const ScheduleOfDay &) const;
+
+    Date getDate() const;
+    void setDate( const Date &date );
+
+    std::vector<ScheduleItem> getItems();
 
 private:
     uint8_t used[24];
-    std::list<ScheduleItem> items;
+    std::set<ScheduleItem> items;
+    Date date;
 };
 
 class Schedule{
 public:
     Schedule();
     ~Schedule();
-    bool add(std::string date,const ScheduleItem &item);
-    bool cancel(std::string date,const ScheduleItem &item);
+    bool add(const Date &date,const ScheduleItem &item);
+    bool cancel(const Date &date,const ScheduleItem &item);
 
-    std::vector<ScheduleItem>  getScheduleItems();
-    std::vector<std::string>   getDates();
-    ScheduleOfDay getScheduleOfDay( std::string day );
+    /* 返回有序日期列表 */
+    std::vector<Date> getDates();
+    ScheduleOfDay getScheduleOfDay( const Date &day );
 private:
-    std::map<std::string,ScheduleOfDay > days;
+    std::set<ScheduleOfDay> days;
 };
 
 #endif

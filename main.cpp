@@ -36,7 +36,7 @@ int main(){
             exit( 0 );
         }  
         else{
-            std::string date;
+            Date date;
             ScheduleItem item;
             char ground;
             bool cancel;

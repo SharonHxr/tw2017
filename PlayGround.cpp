@@ -10,17 +10,17 @@ PlayGround::~PlayGround(){
 }
 
 float PlayGround::revenue(){
-    std::vector<std::string> dates;
+    std::vector<Date> dates;
     dates = schedule.getDates();
 
     float result = 0;
     
-    std::vector<std::string>::iterator ite;
+    std::vector<Date>::iterator ite;
     for( ite=dates.begin(); ite!=dates.end(); ++ite ){
         ScheduleOfDay sod = schedule.getScheduleOfDay( *ite );
         
-        std::list<ScheduleItem> items = sod.getItems();
-        std::list<ScheduleItem>::iterator item_ite;
+        std::vector<ScheduleItem> items = sod.getItems();
+        std::vector<ScheduleItem>::iterator item_ite;
         for( item_ite=items.begin(); item_ite!=items.end(); ++item_ite ){
             result += item_ite->price;
         }
@@ -33,8 +33,9 @@ Schedule &PlayGround::getSchedule(){
     return this->schedule;
 }
 
-bool PlayGround::add( const std::string &date, const ScheduleItem &item ){
+bool PlayGround::add( const Date &date, const ScheduleItem &item ){
     if( item.begin>=item.end ) return false;
+    if( !date.isValid() ) return false;
     float price = 0;
 
     Date d( date );
@@ -53,8 +54,9 @@ bool PlayGround::add( const std::string &date, const ScheduleItem &item ){
     return schedule.add( date, _item );
 }
 
-bool PlayGround::cancel( const std::string &date, const ScheduleItem &item ){
+bool PlayGround::cancel( const Date &date, const ScheduleItem &item ){
     if( item.begin>=item.end ) return false;
+    if( !date.isValid() ) return false;
     float price = 0;
 
     Date d( date );

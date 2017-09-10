@@ -7,7 +7,7 @@
 
 class InputOutput{
 public:
-    static bool parse(const std::string &str,std::string &date,ScheduleItem &item,char &ground,bool &cancel);
+    static bool parse(const std::string &str, Date &date,ScheduleItem &item,char &ground,bool &cancel);
     static void showInputInvalid();
     static void showBookingSuccessed();
     static void showBookingConflict();

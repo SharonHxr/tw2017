@@ -13,8 +13,8 @@ public:
     float revenue();
     Schedule &getSchedule();
 
-    bool add( const std::string &date, const ScheduleItem &item );
-    bool cancel( const std::string &date, const ScheduleItem &item );
+    bool add( const Date &date, const ScheduleItem &item );
+    bool cancel( const Date &date, const ScheduleItem &item );
 
 private:
     BillingRule *prices;
