@@ -18,13 +18,13 @@ public:
     Date( const std::string &date );
 
     /* 获取星期几 */
-    int getWDay();
+    int getWDay() const;
     /* 是否时有效的日期 */
     bool isValid() const;
     /* 获取年月日 */
-    int getYear();
-    int getMonth();
-    int getDay();
+    int getYear() const;
+    int getMonth() const;
+    int getDay() const;
 
     std::string toString() const;
 

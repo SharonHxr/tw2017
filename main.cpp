@@ -18,7 +18,6 @@ int main(){
     while(1){
         
         if( fgets(input,64,stdin) == NULL ){
-            printf( "Eod of file\n" );
             exit( 0 );
         }
 
@@ -42,7 +41,8 @@ int main(){
             bool cancel;
             ret = InputOutput::parse(input,date,item,ground,cancel);
             if( !ret ){
-                printf( "xxxx parse failed: %s\n", input );
+                /* 解析失败 */
+                InputOutput::showInputInvalid();
                 continue;
             }
             PlayGround *pg = NULL;
@@ -59,26 +59,33 @@ int main(){
                 pg = &pg_D;
             }
             else{
-                printf( "xxxx: invalid playground name\n" );
+                /* 无效的运动场地 */
+                InputOutput::showInputInvalid();
                 continue;
             }
 
             if( !cancel ){
-                if( !pg->add( date, item ) ){
-                    printf( "xxxx add failed\n" );
-                    continue;
+                ret = pg->add( date, item );
+                if( ret == PlayGround::NOERR ){
+                    InputOutput::showBookingSuccessed();
                 }
-                else{
-                    printf( "add ok\n" );
+                else if( ret == PlayGround::ERR_CONFLICT ){
+                    InputOutput::showBookingConflict();
+                }
+                else if( ret == PlayGround::ERR_INVAL ){
+                    InputOutput::showInputInvalid();
                 }
             }
             else{
-                if( !pg->cancel( date, item ) ){
-                    printf( "xxxx cancel failed\n" );
-                    continue;
+                ret = pg->cancel( date, item );
+                if( ret == PlayGround::NOERR ){
+                    InputOutput::showBookingSuccessed();
                 }
-                else{
-                    printf( "cancel ok\n" );
+                else if( ret == PlayGround::ERR_INVAL ){
+                    InputOutput::showInputInvalid();
+                }
+                else if( ret == PlayGround::ERR_NEXIST ){
+                    InputOutput::showCancelNotExist();
                 }
             }   
         }

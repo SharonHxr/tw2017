@@ -50,7 +50,7 @@ void Date::init( int _year, int _month, int _day ){
 }
 
 /* 获取星期几 */
-int Date::getWDay(){
+int Date::getWDay() const{
     return wday;
 }
 
@@ -60,15 +60,15 @@ bool Date::isValid() const{
 }
 
 /* 获取年月日 */
-int Date::getYear(){
+int Date::getYear() const{
     return year;
 }
 
-int Date::getMonth(){
+int Date::getMonth() const{
     return month;
 }
 
-int Date::getDay(){
+int Date::getDay() const{
     return day;
 }
 

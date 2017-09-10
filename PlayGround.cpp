@@ -33,44 +33,48 @@ Schedule &PlayGround::getSchedule(){
     return this->schedule;
 }
 
-bool PlayGround::add( const Date &date, const ScheduleItem &item ){
-    if( item.begin>=item.end ) return false;
-    if( !date.isValid() ) return false;
+PlayGround::ErrCode PlayGround::add( const Date &date, const ScheduleItem &item ){
+    if( !date.isValid() ) return ERR_INVAL;
+    if( item.begin>=item.end ) return ERR_INVAL;
     float price = 0;
 
-    Date d( date );
-    if( !d.isValid() ) return false;
-
     for( int idx=item.begin; idx<item.end; ++idx ){
-        int ret = prices->getBilling( d.getWDay(), idx );
+        int ret = prices->getBilling( date.getWDay(), idx );
         if( ret<0 ){
-            return false;
+            /* 无效的时间段 */
+            return ERR_INVAL;
         }
         price += ret;
     }
 
     ScheduleItem _item = item;
     _item.price = price;
-    return schedule.add( date, _item );
+    if( !schedule.add( date, _item ) ){
+        /* 冲突 */
+        return ERR_CONFLICT;
+    }
+    return NOERR;
 }
 
-bool PlayGround::cancel( const Date &date, const ScheduleItem &item ){
-    if( item.begin>=item.end ) return false;
-    if( !date.isValid() ) return false;
+PlayGround::ErrCode PlayGround::cancel( const Date &date, const ScheduleItem &item ){
+    if( !date.isValid() ) return ERR_INVAL;
+    if( item.begin>=item.end ) return ERR_INVAL;
+
     float price = 0;
-
-    Date d( date );
-    if( !d.isValid() ) return false;
-
     for( int idx=item.begin; idx<item.end; ++idx ){
-        float ret = prices->getPenalty( d.getWDay(), idx );
+        float ret = prices->getPenalty( date.getWDay(), idx );
         if( ret<0 ){
-            return false;
+            /* 无效的时间段 */
+            return ERR_INVAL;
         }
         price += ret;
     }
 
     ScheduleItem _item = item;
     _item.price = price;
-    return schedule.cancel( date, _item );
+    if( !schedule.cancel( date, _item ) ){
+        /* 预定不存在 */
+        return ERR_NEXIST;
+    }
+    return NOERR;
 }
