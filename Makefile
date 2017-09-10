@@ -1,12 +1,12 @@
-INC = .
-SRCS = BillingRule.cpp \
-       main.cpp	\
-	   Schedule.cpp \
-	   InputOutput.cpp \
-	   PlayGround.cpp
+INC = src/include
+SRCS = src/BillingRule.cpp \
+       src/main.cpp	\
+	   src/Schedule.cpp \
+	   src/InputOutput.cpp \
+	   src/PlayGround.cpp
 
 OBJS = $(SRCS:.cpp=.o)
-CXXFLAGS = $(addprefix -I,$(INC)) -g
+CXXFLAGS = $(addprefix -I,$(INC))
 
 test: $(OBJS)
 	c++ -o $@ $^
