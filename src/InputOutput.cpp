@@ -14,7 +14,7 @@ bool InputOutput::parse(const std::string &str,Date &date,ScheduleItem &item,cha
         item.userId.push_back(*p);
         p++;
     }
-    //printf("userId = %s\n",item.userId.c_str());
+
     if(item.userId.empty()){
         return false;
     }
@@ -26,7 +26,7 @@ bool InputOutput::parse(const std::string &str,Date &date,ScheduleItem &item,cha
         tmp.push_back(*p);
         p++;
     }
-    //printf("date = %s\n",date.c_str());
+
     date = Date( tmp );
     if( !date.isValid() ){
         return false;
@@ -40,7 +40,6 @@ bool InputOutput::parse(const std::string &str,Date &date,ScheduleItem &item,cha
         return false;
     }
     p += n;
-    //printf("begin = %d,end = %d,n = %d\n",item.begin,item.end,n);
 
     /* 解析场地 */
     while( *p == ' ' ) p++;
@@ -51,7 +50,6 @@ bool InputOutput::parse(const std::string &str,Date &date,ScheduleItem &item,cha
     else{
         return false;
     }
-    //printf("palyground = %c\n",ground);
 
     /* 解析是否取消预约 */
     while( *p == ' ' ) p++;
@@ -103,10 +101,17 @@ void InputOutput::showPlayGround( const std::string &name, PlayGround &pg ){
             if(items_ite->canceled){
                 printf("违约金 ");
             }
-            printf("%f\n",items_ite->price);
+            if((items_ite->price - (int)items_ite->price)<0.001)
+                printf("%.0f元\n",items_ite->price);
+            else
+                printf("%.2f元\n",items_ite->price);
         }
     }
-    printf("> 小计: %f\n",pg.revenue());
+    float re = pg.revenue();
+    if((re-(int)re)<0.001)
+        printf("> 小计: %.0f元\n",re);
+    else
+        printf("> 小计: %.2f元\n",re);
     printf(">\n");
 
 }

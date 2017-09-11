@@ -5,26 +5,27 @@
 #include "Schedule.h"
 
 Date::Date(){
-    init( 0,0,0 );
+    init(0,0,0);
 }
 
-Date::Date( int _year, int _month, int _day ){
+Date::Date(int _year, int _month, int _day){
     init( _year, _month, _day );
 }
 
-Date::Date( const std::string &date ){
+Date::Date(const std::string &date){
     int y,m,d;
-    int ret = sscanf( date.c_str(), "%d-%d-%d", &y, &m, &d );
-    if( ret != 3 ){
-        init( 0,0,0 );
+    int ret = sscanf(date.c_str(), "%d-%d-%d", &y, &m, &d);
+    if(ret != 3){
+        init(0,0,0);
         return;
     }
-    init( y,m,d );
+    init(y,m,d);
 }
-void Date::init( int _year, int _month, int _day ){
+void Date::init(int _year, int _month, int _day){
     year = 0;
     month = 0;
     day = 0;
+    wday = 0;
 
     if( _year<1900 ) return;
     if( _month<1 || _month>12 ) return;
@@ -37,7 +38,7 @@ void Date::init( int _year, int _month, int _day ){
     t.tm_mday = _day;
 
     time_t ret = mktime( &t );
-    if( ret == (time_t)(-1) ){
+    if(ret == (time_t)(-1) ){
         return;
     }
 
@@ -74,7 +75,7 @@ int Date::getDay() const{
 
 std::string Date::toString() const{
     char buf[32];
-    sprintf( buf, "%d-%02d-%02d", year, month, day );
+    sprintf(buf, "%d-%02d-%02d", year, month, day);
     return std::string(buf);
 }
 
@@ -89,7 +90,7 @@ bool Date::operator==( const Date &date ) const{
     return year==date.year&&month==date.month&&day==date.day;
 }
 
-ScheduleItem::ScheduleItem( const std::string &_user, int _begin,int _end, float _price, bool _canceled){
+ScheduleItem::ScheduleItem(const std::string &_user, int _begin,int _end, float _price, bool _canceled){
     this->userId   = _user;
     this->begin    = _begin;
     this->end      = _end;
@@ -118,7 +119,7 @@ Date ScheduleOfDay::getDate() const{
     return date;
 }
 
-void ScheduleOfDay::setDate( const Date &_date ){
+void ScheduleOfDay::setDate(const Date &_date){
     this->date = _date;
 }
 
@@ -126,14 +127,14 @@ std::vector<ScheduleItem> ScheduleOfDay::getItems(){
     std::vector<ScheduleItem> result;
 
     std::set<ScheduleItem>::iterator ite;
-    for( ite=items.begin(); ite!=items.end(); ++ite ){
+    for(ite=items.begin(); ite!=items.end(); ++ite){
         result.push_back( *ite );
     }
     return result;
 }
 
 bool ScheduleOfDay::operator==(const ScheduleOfDay &day){
-    return (date == day.date);
+    return ( date==day.date );
 }
 
 bool ScheduleOfDay::operator <(const ScheduleOfDay &day) const{
@@ -141,8 +142,8 @@ bool ScheduleOfDay::operator <(const ScheduleOfDay &day) const{
 }
 
 bool ScheduleOfDay::add(const ScheduleItem &item){
-    if(item.userId.empty()) return false;
-    if(item.end <= item.begin) return false;
+    if( item.userId.empty() ) return false;
+    if( item.end<=item.begin ) return false;
     
     for(int i=item.begin; i<item.end; i++){
         if(used[i]!=0) return false;
@@ -210,7 +211,7 @@ bool Schedule::cancel(const Date &date,const ScheduleItem &item){
     ScheduleOfDay sod;
     sod.setDate( date );
     std::set<ScheduleOfDay>::iterator ite = days.find( sod );
-    if(ite==days.end()) return false;
+    if( ite==days.end() ) return false;
 
     sod = *ite;
     if( !sod.cancel(item) ){

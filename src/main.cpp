@@ -1,4 +1,6 @@
 #include <string>
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "InputOutput.h"
 #include "Schedule.h"
@@ -20,7 +22,7 @@ int main(){
         if( fgets(input,64,stdin) == NULL ){
             exit( 0 );
         }
-
+        
         if(strlen(input) == 1){
             /* 输出收入汇总 */
             printf("> 收入汇总\n");
@@ -31,7 +33,12 @@ int main(){
             InputOutput::showPlayGround("D",pg_D);
 
             printf("> ---\n");
-            printf( "> 总计: %f\n", pg_A.revenue()+pg_B.revenue()+pg_C.revenue()+pg_D.revenue() );
+            float allRevenue = pg_A.revenue()+pg_B.revenue()+pg_C.revenue()+pg_D.revenue();
+            if((allRevenue - (int)allRevenue)<0.001)  
+                printf( "> 总计: %.0f元\n", allRevenue);
+            else
+                printf( "> 总计: %.2f元\n", allRevenue);
+
             exit( 0 );
         }  
         else{

@@ -10,7 +10,7 @@ public:
         NOERR        = 0,  /* 没有错误 */
         ERR_INVAL    = -1, /* 无效参数 */
         ERR_CONFLICT = -2, /* 预定时间冲突 */
-        ERR_NEXIST   = -3, /* 不存在 */
+        ERR_NEXIST   = -3, /* 取消不存在 */
     };
 public:
     PlayGround(BillingRule *prices);
@@ -27,7 +27,7 @@ public:
     ErrCode add( const Date &date, const ScheduleItem &item );
     /* 取消成功返回 NOERR
      * 参数非法返回 ERR_INVAL
-     * Item不存在返回 ERR_CONFLICT
+     * Item不存在返回 ERR_NEXIST
      */
     ErrCode cancel( const Date &date, const ScheduleItem &item );
 

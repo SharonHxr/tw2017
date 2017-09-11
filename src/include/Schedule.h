@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <stdint.h>
 
 class Date{
 public:

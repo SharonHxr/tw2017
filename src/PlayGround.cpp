@@ -16,12 +16,12 @@ float PlayGround::revenue(){
     float result = 0;
     
     std::vector<Date>::iterator ite;
-    for( ite=dates.begin(); ite!=dates.end(); ++ite ){
+    for(ite=dates.begin(); ite!=dates.end(); ++ite){
         ScheduleOfDay sod = schedule.getScheduleOfDay( *ite );
         
         std::vector<ScheduleItem> items = sod.getItems();
         std::vector<ScheduleItem>::iterator item_ite;
-        for( item_ite=items.begin(); item_ite!=items.end(); ++item_ite ){
+        for(item_ite=items.begin(); item_ite!=items.end(); ++item_ite){
             result += item_ite->price;
         }
     }

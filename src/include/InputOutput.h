@@ -2,6 +2,7 @@
 #define _H_INPUTOUTPUT_
 
 #include <string>
+#include <stdio.h>
 #include "Schedule.h"
 #include "PlayGround.h"
 
