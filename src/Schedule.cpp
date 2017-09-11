@@ -103,6 +103,9 @@ bool ScheduleItem::operator==(const ScheduleItem &item) const{
 }
 
 bool ScheduleItem::operator<(const ScheduleItem &item) const{
+    if( begin == item.begin ){
+        return userId<item.userId;
+    }
     return begin<item.begin;
 }
 
@@ -126,7 +129,7 @@ void ScheduleOfDay::setDate(const Date &_date){
 std::vector<ScheduleItem> ScheduleOfDay::getItems(){
     std::vector<ScheduleItem> result;
 
-    std::set<ScheduleItem>::iterator ite;
+    std::multiset<ScheduleItem>::iterator ite;
     for(ite=items.begin(); ite!=items.end(); ++ite){
         result.push_back( *ite );
     }
@@ -144,10 +147,23 @@ bool ScheduleOfDay::operator <(const ScheduleOfDay &day) const{
 bool ScheduleOfDay::add(const ScheduleItem &item){
     if( item.userId.empty() ) return false;
     if( item.end<=item.begin ) return false;
-    
+
     for(int i=item.begin; i<item.end; i++){
         if(used[i]!=0) return false;
     }
+
+    /* 查找是否存在cancel记录 */
+    std::multiset<ScheduleItem>::iterator ite = items.find( item );
+    if( ite!=items.end() && ite->canceled ){
+        #if 1
+        /* 不允许取消再预约 */
+            return false;
+        #else
+        /* 允许取消再预约 */
+            items.erase( ite );
+        #endif
+    }
+ 
     for(int i=item.begin; i<item.end; i++){
         used[i] = 1;
     }
@@ -157,7 +173,7 @@ bool ScheduleOfDay::add(const ScheduleItem &item){
 }
 
 bool ScheduleOfDay::cancel( const ScheduleItem &item ){
-    std::set<ScheduleItem>::iterator ite = std::find(items.begin(),items.end(),item);
+    std::multiset<ScheduleItem>::iterator ite = std::find(items.begin(),items.end(),item);
     if(ite == items.end()) return false;
     if( ite->canceled ) return false;
 

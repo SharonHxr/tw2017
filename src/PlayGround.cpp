@@ -49,6 +49,7 @@ PlayGround::ErrCode PlayGround::add( const Date &date, const ScheduleItem &item 
 
     ScheduleItem _item = item;
     _item.price = price;
+    _item.canceled = false;
     if( !schedule.add( date, _item ) ){
         /* 冲突 */
         return ERR_CONFLICT;

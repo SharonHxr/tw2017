@@ -23,16 +23,19 @@ int main(){
             exit( 0 );
         }
         
-        if(strlen(input) == 1){
+        if(strlen(input) == 1 && (input[0]=='\n' || input[0] == '\r')){
             /* 输出收入汇总 */
             printf("> 收入汇总\n");
             printf("> ---\n");
             InputOutput::showPlayGround("A",pg_A);
+            printf(">\n");
             InputOutput::showPlayGround("B",pg_B);
+            printf(">\n");
             InputOutput::showPlayGround("C",pg_C);
+            printf(">\n");
             InputOutput::showPlayGround("D",pg_D);
-
             printf("> ---\n");
+            
             float allRevenue = pg_A.revenue()+pg_B.revenue()+pg_C.revenue()+pg_D.revenue();
             if((allRevenue - (int)allRevenue)<0.001)  
                 printf( "> 总计: %.0f元\n", allRevenue);

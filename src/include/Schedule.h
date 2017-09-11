@@ -72,7 +72,7 @@ public:
 
 private:
     uint8_t used[24];
-    std::set<ScheduleItem> items;
+    std::multiset<ScheduleItem> items;
     Date date;
 };
 

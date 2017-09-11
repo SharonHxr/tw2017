@@ -112,6 +112,5 @@ void InputOutput::showPlayGround( const std::string &name, PlayGround &pg ){
         printf("> 小计: %.0f元\n",re);
     else
         printf("> 小计: %.2f元\n",re);
-    printf(">\n");
 
 }
